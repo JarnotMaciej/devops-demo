@@ -14,5 +14,6 @@ flask --app dummy-endpoint run
 
 ```
 docker build --no-cache -t JarnotMaciej/dummy-endpoint .
-docker compose up -d
+docker run -it -p 5000:5000 JarnotMaciej/dummy-endpoint:latest
+docker compose up -d --build --force-recreate
 ```
