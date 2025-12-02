@@ -1,2 +1,13 @@
+# flask
 flask-app/.venv
 flask-app/__pycache__/
+
+# terraform
+terraform/.tfvars
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform.tfstate.lock.info
+
+# misc
+notes.md
