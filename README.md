@@ -52,6 +52,7 @@ terraform plan -var-file=".tfvars"
 terraform apply -var-file=".tfvars"
 terraform output -raw kubernetes_config > ~/.kube/aks-config
 export KUBECONFIG=~/.kube/aks-config
+# echo "KUBECONFIG=~/.kube/aks-config" >> ~/.bashrc
 terraform destroy -var-file=".tfvars"
 ```
 
@@ -59,4 +60,7 @@ terraform destroy -var-file=".tfvars"
 
 ```bash
 kubectl get nodes
+kubectl apply -f demo-deployment.yaml
+kubectl apply -f demo-service.yaml
+watch -n 1 kubectl get service demo-service
 ```
