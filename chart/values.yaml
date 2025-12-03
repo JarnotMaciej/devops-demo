@@ -1,0 +1,8 @@
+replicaCount: 2
+appName: "devops-demo"
+image:
+  repository: "ghcr.io/jarnotmaciej/devops-demo"
+  tag: "main"
+service:
+  port: 80
+  targetPort: 5000

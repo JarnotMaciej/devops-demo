@@ -56,11 +56,11 @@ export KUBECONFIG=~/.kube/aks-config
 terraform destroy -var-file=".tfvars"
 ```
 
-## kubectl
+## kubectl && helm
 
 ```bash
 kubectl get nodes
-kubectl apply -f demo-deployment.yaml
-kubectl apply -f demo-service.yaml
+helm install demo-release ./chart
+helm upgrade demo-release ./chart
 watch -n 1 kubectl get service demo-service
 ```
