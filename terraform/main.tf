@@ -41,3 +41,13 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     Environment = "Development"
   }
 }
+
+output "kubernetes_config" {
+  value = azurerm_kubernetes_cluster.aks_cluster.kube_config_raw
+  sensitive = true
+}
+
+output "kubernetes_admin_config" {
+  value = azurerm_kubernetes_cluster.aks_cluster.kube_admin_config_raw
+  sensitive = true
+}

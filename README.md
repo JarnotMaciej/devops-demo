@@ -32,6 +32,7 @@ docker compose up -d --build --force-recreate
 
 ```bash
 az login
+az account list
 az account set --subscription "<YOUR-SUBSCRIPTION-ID>"
 az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<YOUR-SUBSCRIPTION-ID>"
 
@@ -49,5 +50,13 @@ terraform init
 terraform validate
 terraform plan -var-file=".tfvars"
 terraform apply -var-file=".tfvars"
+terraform output -raw kubernetes_config > ~/.kube/aks-config
+export KUBECONFIG=~/.kube/aks-config
 terraform destroy -var-file=".tfvars"
+```
+
+## kubectl
+
+```bash
+kubectl get nodes
 ```
