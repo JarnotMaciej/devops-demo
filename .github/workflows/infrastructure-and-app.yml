@@ -15,6 +15,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     outputs:
+      aks_resource_group: ${{ steps.tf-outputs.outputs.aks_resource_group }}
       aks_cluster_name: ${{ steps.tf-outputs.outputs.aks_cluster_name }}
     defaults:
       run:
@@ -47,6 +48,7 @@ jobs:
       - name: Export Terraform Outputs
         id: tf-outputs
         run: |
+          echo "aks_resource_group=$(terraform output -raw aks_resource_group)" >> "$GITHUB_OUTPUT"
           echo "aks_cluster_name=$(terraform output -raw aks_cluster_name)" >> "$GITHUB_OUTPUT"
 
   deploy:
@@ -66,7 +68,7 @@ jobs:
       - name: Set AKS Context
         uses: azure/aks-set-context@v3
         with:
-          resource-group: ${{ vars.RESOURCE_GROUP_NAME }}
+          resource-group: ${{ needs.terraform.outputs.aks_resource_group }}
           cluster-name: ${{ needs.terraform.outputs.aks_cluster_name }}
 
       - name: Install Helm
