@@ -3,6 +3,10 @@ name: Publish Docker Image
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'flask-app/**'
+      - 'Dockerfile'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io

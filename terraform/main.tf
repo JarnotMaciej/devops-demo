@@ -14,7 +14,6 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = var.subscription
 }
 
 resource "azurerm_resource_group" "devops_demo" {
