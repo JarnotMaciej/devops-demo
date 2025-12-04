@@ -23,7 +23,6 @@ jobs:
       TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
       TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
 
-
     steps:
       - uses: actions/checkout@v4
 
