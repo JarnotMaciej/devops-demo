@@ -5,7 +5,7 @@ variable "resource-group" {
     })
     default = {
         name = "my-resource-group"
-        location = "West Europe"
+        location = "Poland Central"
     }
 }
 
