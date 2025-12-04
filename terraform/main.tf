@@ -5,6 +5,11 @@ terraform {
       version = "=4.1.0"
     }
   }
+  backend "azurerm" {
+    storage_account_name = "tfbackenddevopsdemo"
+    container_name = "terraform"
+    key = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {

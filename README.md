@@ -46,6 +46,7 @@ export ARM_TENANT_ID="<TENANT_VALUE>"
 
 ```bash
 cd terraform
+export ARM_SAS_TOKEN="?sv=2020..."
 terraform init
 terraform validate
 terraform plan -var-file=".tfvars"
