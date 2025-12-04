@@ -78,4 +78,3 @@ jobs:
         # This updates the Helm release with the new image tag (Git SHA)
         run: |
           helm upgrade --install devops-demo ./chart
-            --set image.tag=${{ github.sha }}
