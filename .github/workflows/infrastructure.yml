@@ -18,12 +18,12 @@ jobs:
       run:
         working-directory: ./terraform
     env:
-      ARM_CLIENT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
-      ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
-      ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
-      ARM_TENANT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SAS_TOKEN: ${{ secrets.ARM_SAS_TOKEN }}
-      TF_VAR_subscription: ${{ vars.TF_VAR_SUBSCRIPTION }}
+      TF_VAR_subscription: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       TF_VAR_resource_group: ${{ vars.TF_VAR_RESOURCE_GROUP }}
 
     steps:
