@@ -23,6 +23,7 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
       ARM_TENANT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
       ARM_SAS_TOKEN: ${{ secrets.ARM_SAS_TOKEN }}
+      TF_VAR_subscription: ${{ vars.TF_VAR_SUBSCRIPTION }}
       TF_VAR_resource_group: ${{ vars.TF_VAR_RESOURCE_GROUP }}
 
     steps:
