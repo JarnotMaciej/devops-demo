@@ -1,12 +1,11 @@
-variable "resource-group" {
-    type = object({
-        name = string
-        location = string
-    })
-    default = {
-        name = "my-resource-group"
-        location = "Poland Central"
-    }
+variable "resource-group-name" {
+    type = string
+    default = "my-resource-group"
+}
+
+variable "resource-group-location" {
+    type = string
+    default = "Poland Central"
 }
 
 variable "subscription" {

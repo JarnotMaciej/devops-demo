@@ -18,8 +18,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "devops_demo" {
-  name     = var.resource-group["name"]
-  location = var.resource-group["location"]
+  name     = var.resource-group-name
+  location = var.resource-group-location
 
   tags = {
     Environment = "Development"

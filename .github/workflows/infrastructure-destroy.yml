@@ -1,10 +1,6 @@
-name: Infrastructure (Terraform)
+name: Infrastructure Destroy
 
 on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'terraform/**'
   workflow_dispatch:
 
 permissions:
@@ -24,7 +20,9 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SAS_TOKEN: ${{ secrets.ARM_SAS_TOKEN }}
       TF_VAR_subscription: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      TF_VAR_resource_group: ${{ vars.TF_VAR_RESOURCE_GROUP }}
+      TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
+      TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
+
 
     steps:
       - uses: actions/checkout@v4
@@ -36,8 +34,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -destroy -out=tfplan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan

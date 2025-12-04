@@ -1,0 +1,78 @@
+name: Deploy Infrastructure and App 
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'terraform/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      ARM_SAS_TOKEN: ${{ secrets.ARM_SAS_TOKEN }}
+      TF_VAR_subscription: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
+      TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+
+      - name: Export Terraform Outputs
+        id: tf-outputs
+        run: |
+          echo "aks_resource_group=$(terraform output -raw aks_resource_group)" >> "$GITHUB_OUTPUT"
+          echo "aks_cluster_name=$(terraform output -raw aks_cluster_name)" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS Context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ needs.terraform.outputs.aks_resource_group }}
+          cluster-name: ${{ needs.terraform.outputs.aks_cluster_name }}
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Deploy to AKS
+        # This updates the Helm release with the new image tag (Git SHA)
+        run: |
+          helm upgrade --install devops-demo ./chart
+            --set image.tag=${{ github.sha }}
