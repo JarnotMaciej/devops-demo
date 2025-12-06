@@ -78,3 +78,33 @@ jobs:
         # This updates the Helm release with the new image tag (Git SHA)
         run: |
           helm upgrade --install devops-demo ./chart
+
+      - name: Get app URL
+        id: app-url
+        run: |
+          EXTERNAL_IP=""
+          for i in {1..30}; do
+            EXTERNAL_IP=$(kubectl get svc devops-demo-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo "")
+            if [ -n "$EXTERNAL_IP" ]; then
+              break
+            fi
+            echo "Waiting for LoadBalancer IP (attempt $i/30)..."
+            sleep 15
+          done
+
+          if [ -z "$EXTERNAL_IP" ]; then
+            echo "Warning: LoadBalancer IP not assigned yet, using service name"
+            EXTERNAL_IP="devops-demo-service"
+          fi
+
+          echo "url=http://$EXTERNAL_IP" >> "$GITHUB_OUTPUT"
+          echo "App URL: http://$EXTERNAL_IP"
+
+      - name: Create GitHub deployment status
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          state: success
+          environment: production
+          environment-url: ${{ steps.app-url.outputs.url }}
+          deployment-id: ${{ github.run_id }}
