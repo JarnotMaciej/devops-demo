@@ -36,6 +36,9 @@ graph LR
 * **CI/CD Automation (GitHub Actions):**
     * Comprehensive pipeline including: Code Linting -> Docker Build -> Infrastructure Provisioning -> Helm Deployment.
     * **Zero-touch deployment:** Commits to `main` automatically trigger infrastructure updates and application rollout.
+* **Cost Control:**
+    * Includes a dedicated Infrastructure Destroy workflow.
+    * Why? Because leaving an AKS cluster running 24/7 on a personal budget is the fastest way to learn about cloud cost optimization... the hard way. 😉
 
 ---
 
